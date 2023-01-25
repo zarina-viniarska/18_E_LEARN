@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using _18_E_LEARN.DataAccess.Data.Models.User;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -22,5 +23,7 @@ namespace _18_E_LEARN.DataAccess.Data.Context
             optionsBuilder.UseSqlServer(connectionStrings);
 
         }
+
+        public DbSet<AppUser> AppUsers { get; set; }
     }
 }
