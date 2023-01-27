@@ -10,6 +10,9 @@ namespace _18_E_LEARN.Web.Infrastructure.Services
             // Add services to the container.
             services.AddControllersWithViews();
 
+            // Add razor pages
+            services.AddRazorPages();
+
             // Add application database context
             services.AddDbContext<AppDbContext>();
 
