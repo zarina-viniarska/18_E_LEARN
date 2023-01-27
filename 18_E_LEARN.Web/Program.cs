@@ -1,25 +1,14 @@
 using _18_E_LEARN.DataAccess.Data.Context;
 using _18_E_LEARN.DataAccess.Data.Models.User;
 using _18_E_LEARN.DataAccess.Initializer;
+using _18_E_LEARN.Web.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// Add application database context
-builder.Services.AddDbContext<AppDbContext>();
-
-// Add Identity
-builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
-{
-
-})
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
-
+// Include services
+ServicesConfiguration.Config(builder.Services);
 
 
 var app = builder.Build();
