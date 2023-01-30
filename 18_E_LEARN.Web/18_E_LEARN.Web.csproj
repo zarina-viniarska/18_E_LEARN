@@ -22,4 +22,8 @@
     <ProjectReference Include="..\18_E_LEARN.DataAccess\18_E_LEARN.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\" />
+  </ItemGroup>
+
 </Project>
