@@ -8,5 +8,25 @@ namespace _18_E_LEARN.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult Users()
+        {
+            return View();
+        }
+
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        public IActionResult SignUp()
+        {
+            return View();
+        }
     }
 }
