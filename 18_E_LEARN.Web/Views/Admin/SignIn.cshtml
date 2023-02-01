@@ -20,10 +20,12 @@
                                 <label>Email</label>
                                 <div class="mb-3">
                                     <input type="email" asp-for="Email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+                                    <span class="text-danger" asp-validation-for="Email"></span>
                                 </div>
                                 <label>Password</label>
                                 <div class="mb-3">
                                     <input type="password" asp-for="Password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                                    <span class="text-danger" asp-validation-for="Password"></span>
                                 </div>
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" asp-for="RememberMe" type="checkbox" id="rememberMe" checked="">
@@ -51,3 +53,9 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial.cshtml" />
+    }
+}

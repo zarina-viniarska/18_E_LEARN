@@ -44,28 +44,32 @@ namespace _18_E_LEARN.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginUserVM model)
         {
-            var user = await  _userManager.FindByEmailAsync(model.Email);
-
-            if (user == null)
+            if(ModelState.IsValid)
             {
-                return View("User not found!");
-            }
-            else
-            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-
-                if(result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
+                if (user == null)
                 {
                     return View(model);
                 }
+                else
+                {
+
+                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return View(model);
+                    }
+                }
             }
 
-           
+
+            return View(model);
         }
 
         [AllowAnonymous]
