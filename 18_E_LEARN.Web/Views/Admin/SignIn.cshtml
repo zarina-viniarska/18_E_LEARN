@@ -16,6 +16,10 @@
                             <p class="mb-0">Enter your email and password to sign in</p>
                         </div>
                         <div class="card-body">
+                            @if (@ViewBag.AuthError != null)
+                            {
+                                <span class="text-danger">@ViewBag.AuthError</span>
+                            }
                             <form role="form" asp-controller="Admin" asp-action="SignIn" method="post">
                                 <label>Email</label>
                                 <div class="mb-3">

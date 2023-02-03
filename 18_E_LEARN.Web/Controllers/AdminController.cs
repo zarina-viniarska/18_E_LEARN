@@ -14,6 +14,8 @@ namespace _18_E_LEARN.Web.Controllers
     {
         private readonly UserService _userService;
 
+        public object AddModelState { get; private set; }
+
         public AdminController(UserService userService)
         {
             _userService = userService;
@@ -55,6 +57,7 @@ namespace _18_E_LEARN.Web.Controllers
                     return RedirectToAction("Index", "Admin");
                 }
                 // write code
+                ViewBag.AuthError = result.Message;
                 return View(model);
             }
             return View(model);
