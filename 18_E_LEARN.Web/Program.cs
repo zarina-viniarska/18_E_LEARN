@@ -5,11 +5,15 @@ using _18_E_LEARN.Web.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using _18_E_LEARN.Web.Infrastructure.AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Include services
 ServicesConfiguration.Config(builder.Services);
+
+// Include Mapping
+AutoMapperConfiguration.Config(builder.Services);
 
 
 var app = builder.Build();

@@ -1,5 +1,6 @@
 ﻿using _18_E_LEARN.DataAccess.Data.Models.User;
 using _18_E_LEARN.DataAccess.Data.ViewModels.User;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,15 +14,19 @@ namespace _18_E_LEARN.BusinessLogic.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IMapper _mapper;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public UserService(IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager= userManager;
             _signInManager= signInManager;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse> LoginUserAsync(LoginUserVM model)
-        {
+        {   
+            // Example
+            //AppUser mappedUser = _mapper.Map<LoginUserVM, AppUser>(model);
             AppUser user = await _userManager.FindByEmailAsync(model.Email);
             if(user == null)
             {
