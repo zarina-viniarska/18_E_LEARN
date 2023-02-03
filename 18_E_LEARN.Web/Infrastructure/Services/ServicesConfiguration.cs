@@ -1,5 +1,8 @@
-﻿using _18_E_LEARN.DataAccess.Data.Context;
+﻿using _18_E_LEARN.BusinessLogic.Services;
+using _18_E_LEARN.DataAccess.Data.Context;
 using _18_E_LEARN.DataAccess.Data.Models.User;
+using _18_E_LEARN.DataAccess.Data.ViewModels.User;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 
 namespace _18_E_LEARN.Web.Infrastructure.Services
@@ -12,6 +15,9 @@ namespace _18_E_LEARN.Web.Infrastructure.Services
 
             // Add razor pages
             services.AddRazorPages();
+
+            // Add User Service
+            services.AddTransient<UserService>();
 
             // Add application database context
             services.AddDbContext<AppDbContext>();
@@ -32,6 +38,12 @@ namespace _18_E_LEARN.Web.Infrastructure.Services
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddFluentValidation(options =>
+            {
+                options.DisableDataAnnotationsValidation = true;
+                options.ImplicitlyValidateChildProperties = true;
+                options.RegisterValidatorsFromAssemblyContaining<LoginUserVM>();
+            });
         }
     }
 }

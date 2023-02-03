@@ -1,5 +1,8 @@
-﻿using _18_E_LEARN.DataAccess.Data.Models.User;
+﻿using _18_E_LEARN.BusinessLogic.Services;
+using _18_E_LEARN.DataAccess.Data.Models.User;
 using _18_E_LEARN.DataAccess.Data.ViewModels.User;
+using _18_E_LEARN.DataAccess.Validation.User;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +12,11 @@ namespace _18_E_LEARN.Web.Controllers
     [Authorize]
     public class AdminController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserService _userService;
 
-        public AdminController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AdminController(UserService userService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -44,31 +45,18 @@ namespace _18_E_LEARN.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(LoginUserVM model)
         {
-            if(ModelState.IsValid)
+            var valdator = new LoginUserValidation();
+            var validationresult = await valdator.ValidateAsync(model);
+            if (validationresult.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-
-                if (user == null)
+                var result = await _userService.LoginUserAsync(model);
+                if (result.Success)
                 {
-                    return View(model);
+                    return RedirectToAction("Index", "Admin");
                 }
-                else
-                {
-
-                    var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        return View(model);
-                    }
-                }
+                // write code
+                return View(model);
             }
-
-
             return View(model);
         }
 
