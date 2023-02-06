@@ -37,9 +37,13 @@ namespace _18_E_LEARN.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
         public IActionResult SignIn()
         {
+            var user = HttpContext.User.Identity.IsAuthenticated;
+            if (user)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -56,7 +60,6 @@ namespace _18_E_LEARN.Web.Controllers
                 {
                     return RedirectToAction("Index", "Admin");
                 }
-                // write code
                 ViewBag.AuthError = result.Message;
                 return View(model);
             }
@@ -66,7 +69,43 @@ namespace _18_E_LEARN.Web.Controllers
         [AllowAnonymous]
         public IActionResult SignUp()
         {
+            var user = HttpContext.User.Identity.IsAuthenticated;
+            if (user)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> SignUp(RegisterUserVM model)
+        {
+            var validator = new RegisterUserValidation();
+            var validationresult = await validator.ValidateAsync(model);
+            if (validationresult.IsValid)
+            {
+                var result = await _userService.RegisterUserAsync(model);
+                if (result.Success)
+                {
+                    return RedirectToAction("SignIn", "Admin");
+                }
+
+                ViewBag.AuthError = result.Message;
+                return View(model);
+            }
+            ViewBag.AuthError = validationresult.Errors.First();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            var result = await _userService.LogoutUserAsync();
+            if (result.Success)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Admin");
         }
     }
 }

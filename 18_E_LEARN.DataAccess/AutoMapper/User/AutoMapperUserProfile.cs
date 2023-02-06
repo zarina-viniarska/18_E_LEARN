@@ -15,6 +15,8 @@ namespace _18_E_LEARN.DataAccess.AutoMapper.User
         {
             CreateMap<AppUser, LoginUserVM>();
             CreateMap<LoginUserVM, AppUser>();
+            CreateMap<AppUser, RegisterUserVM>();
+            CreateMap<RegisterUserVM,AppUser>();
         }
     }
 }
