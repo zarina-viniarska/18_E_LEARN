@@ -89,9 +89,18 @@ namespace _18_E_LEARN.BusinessLogic.Services
 
         public async Task<ServiceResponse> RegisterUserAsync(RegisterUserVM model)
         {
+            if(model.Password != model.ConfirmPassword)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "Psswords do not match.",
+                };
+            }
+
             var mappedUser = _mapper.Map<RegisterUserVM, AppUser>(model);
             mappedUser.UserName = model.Email;
-            var result = await _userManager.CreateAsync(mappedUser);
+            var result = await _userManager.CreateAsync(mappedUser, model.Password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(mappedUser, model.Role);
