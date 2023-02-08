@@ -2,10 +2,10 @@
 using _18_E_LEARN.DataAccess.Data.Models.User;
 using _18_E_LEARN.DataAccess.Data.ViewModels.User;
 using _18_E_LEARN.DataAccess.Validation.User;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace _18_E_LEARN.Web.Controllers
 {
@@ -33,6 +33,7 @@ namespace _18_E_LEARN.Web.Controllers
 
         public IActionResult Profile()
         {
+            var useId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View();
         }
 
@@ -74,6 +75,23 @@ namespace _18_E_LEARN.Web.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            return View();
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            var result = await _userService.ConfirmEmailAsync(userId, token);
+            if (result.Success)
+            {
+                return RedirectToAction("ConfirmEmailPage", "Admin");
+            }
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult ConfirmEmailPage()
+        {
             return View();
         }
 

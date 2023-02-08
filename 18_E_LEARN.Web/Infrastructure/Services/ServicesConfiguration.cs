@@ -19,6 +19,9 @@ namespace _18_E_LEARN.Web.Infrastructure.Services
             // Add User Service
             services.AddTransient<UserService>();
 
+            // Add email service
+            services.AddTransient<EmailService>();
+
             // Add application database context
             services.AddDbContext<AppDbContext>();
 
