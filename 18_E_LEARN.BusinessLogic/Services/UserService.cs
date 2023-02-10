@@ -87,6 +87,69 @@ namespace _18_E_LEARN.BusinessLogic.Services
             };
         }
 
+        public async Task<ServiceResponse> UpdateProfileAsync(UpdateProfileVM model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if(user == null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "User not found."
+                };
+            }
+
+            if(model.Password != model.ConfirmPassword)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "Password do not match."
+                };
+            }
+
+            if(user.Email != model.Email)
+            {
+                user.EmailConfirmed = false;
+            }
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+            user.UserName = model.Email;
+
+            var changePassword = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
+            if(changePassword.Succeeded) 
+            {
+                var result = await _userManager.UpdateAsync(user);
+                if(result.Succeeded)
+                {
+                    await SendConfirmationEmailAsync(user);
+                    await _signInManager.SignOutAsync();
+                    return new ServiceResponse
+                    {
+                        Success = true,
+                        Message = "Profile successfully updated."
+                    };
+                }
+            }
+
+            List<IdentityError> errorList = changePassword.Errors.ToList();
+            string errors = string.Empty;
+
+            foreach (var error in errorList)
+            {
+                errors = errors + error.Description.ToString();
+            }
+
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = errors
+            };
+
+        }
+
         public async Task<ServiceResponse> GetUserForSettingsAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);

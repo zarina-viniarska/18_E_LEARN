@@ -32,6 +32,25 @@ namespace _18_E_LEARN.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UserSettings(UpdateProfileVM model)
+        {
+            var validator = new UpdateProfileValidation();
+            var validationresult = await validator.ValidateAsync(model);
+            if (validationresult.IsValid)
+            {
+                var result = await _userService.UpdateProfileAsync(model);
+                if (result.Success)
+                {
+                    return RedirectToAction("SignIn", "Admin");
+                }
+                ViewBag.AuthError = result.Message;
+                return View(model);
+
+            }
+            return View(model);
+        }
+
         public async Task<IActionResult> UserSettings()
         {
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
