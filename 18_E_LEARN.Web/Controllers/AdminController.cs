@@ -28,12 +28,28 @@ namespace _18_E_LEARN.Web.Controllers
 
         public IActionResult Users()
         {
+
             return View();
         }
 
-        public IActionResult Profile()
+        public async Task<IActionResult> UserSettings()
         {
-            var useId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _userService.GetUserForSettingsAsync(userId);
+            if (result.Success)
+            {
+                return View(result.Payload);
+            }
+            return View();
+        }
+        public async Task<IActionResult> Profile()
+        {
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _userService.GetUserProfileAsync(userId);
+            if (result.Success)
+            {
+                return View(result.Payload);
+            }
             return View();
         }
 

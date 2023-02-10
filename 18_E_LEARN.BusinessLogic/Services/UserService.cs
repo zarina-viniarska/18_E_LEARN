@@ -87,6 +87,27 @@ namespace _18_E_LEARN.BusinessLogic.Services
             };
         }
 
+        public async Task<ServiceResponse> GetUserForSettingsAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "User not found."
+                };
+            }
+
+            var mappedUser = _mapper.Map<AppUser, UpdateProfileVM>(user);
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = "User data loaded.",
+                Payload = mappedUser
+            };
+        }
+
         public async Task<ServiceResponse> RegisterUserAsync(RegisterUserVM model)
         {
             if(model.Password != model.ConfirmPassword)
@@ -170,6 +191,30 @@ namespace _18_E_LEARN.BusinessLogic.Services
 
             string emailBody = $"<h1>Confirm your email</h1> <a href='{url}'>Confirm now</a>";
             await _emailService.SendEmailAsync(newUser.Email, "Email confirmation.", emailBody);
+        }
+
+        public async Task<ServiceResponse> GetUserProfileAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "User not found."
+                };
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var mappedUder = _mapper.Map<AppUser, UserProfileVM>(user);
+            mappedUder.Role = roles[0];
+
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = "User profile loaded.",
+                Payload = mappedUder
+            };
         }
     }
 }

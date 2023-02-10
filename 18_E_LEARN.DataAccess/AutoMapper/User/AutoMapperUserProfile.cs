@@ -13,10 +13,10 @@ namespace _18_E_LEARN.DataAccess.AutoMapper.User
     {
         public AutoMapperUserProfile()
         {
-            CreateMap<AppUser, LoginUserVM>();
-            CreateMap<LoginUserVM, AppUser>();
-            CreateMap<AppUser, RegisterUserVM>();
-            CreateMap<RegisterUserVM,AppUser>();
+            CreateMap<AppUser, LoginUserVM>().ReverseMap();
+            CreateMap<AppUser, RegisterUserVM>().ReverseMap();
+            CreateMap<AppUser, UserProfileVM>().ReverseMap();
+            CreateMap<AppUser, UpdateProfileVM>().ReverseMap();
         }
     }
 }
