@@ -26,13 +26,18 @@ namespace _18_E_LEARN.Web.Controllers
             return View();
         }
 
-        public IActionResult Users()
+        public  async Task<IActionResult> Users()
         {
-
+            var result = await _userService.GetAllUsers();
+            if (result.Success)
+            {
+                return View(result.Payload);
+            }
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserSettings(UpdateProfileVM model)
         {
             var validator = new UpdateProfileValidation();
@@ -159,6 +164,11 @@ namespace _18_E_LEARN.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Index", "Admin");
+        }
+
+        public async Task<IActionResult> EditUser(string id)
+        {
+            return View();
         }
     }
 }

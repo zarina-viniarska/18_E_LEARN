@@ -17,6 +17,7 @@ namespace _18_E_LEARN.DataAccess.AutoMapper.User
             CreateMap<AppUser, RegisterUserVM>().ReverseMap();
             CreateMap<AppUser, UserProfileVM>().ReverseMap();
             CreateMap<AppUser, UpdateProfileVM>().ReverseMap();
+            CreateMap<AppUser, AllUsersVM>().ReverseMap();
         }
     }
 }

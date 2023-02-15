@@ -3,6 +3,7 @@ using _18_E_LEARN.DataAccess.Data.ViewModels.User;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,24 @@ namespace _18_E_LEARN.BusinessLogic.Services
                 Message = "User logged out."
             };
         }
+
+        public async Task<ServiceResponse> GetAllUsers()
+        {
+            List<AppUser> users = await _userManager.Users.ToListAsync();
+            List<AllUsersVM> mappedUsers = users.Select(u => _mapper.Map<AppUser, AllUsersVM>(u)).ToList();
+            for (int i = 0; i < users.Count; i++)
+            {
+                mappedUsers[i].Role = (await _userManager.GetRolesAsync(users[i])).FirstOrDefault();
+            }
+
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = "All users loaded.",
+                Payload = mappedUsers
+            };
+        }
+
 
         public async Task<ServiceResponse> UpdateProfileAsync(UpdateProfileVM model)
         {
