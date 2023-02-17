@@ -168,7 +168,32 @@ namespace _18_E_LEARN.Web.Controllers
 
         public async Task<IActionResult> EditUser(string id)
         {
+            var result = await _userService.GetUserByAsync(id);
+            if (result.Success)
+            {
+                return View(result.Payload);
+            }
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(EditUserVM model)
+        {
+            var validator = new EditUserValidation();
+            var validationResult = await validator.ValidateAsync(model);
+            if (validationResult.IsValid)
+            {
+                var result = await _userService.EditUserAsync(model);
+                if (result.Success)
+                {
+                    return RedirectToAction("Users", "Admin");
+                }
+
+                ViewBag.AuthError = result.Message;
+                return View(model);
+            }
+            return View(model);
         }
     }
 }

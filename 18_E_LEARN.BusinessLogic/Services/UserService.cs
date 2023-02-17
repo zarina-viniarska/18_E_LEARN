@@ -298,5 +298,74 @@ namespace _18_E_LEARN.BusinessLogic.Services
                 Payload = mappedUder
             };
         }
+
+        public async Task<ServiceResponse> GetUserByAsync(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "User not found."
+                };
+            }
+
+            var mappedUser = _mapper.Map<AppUser, EditUserVM>(user);
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = "User loaded.",
+                Payload = mappedUser
+            };
+        }
+
+        public async Task<ServiceResponse> EditUserAsync(EditUserVM model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "User not found."
+                };
+            }
+
+            user.Name = model.Name;
+            user.Surname = model.Surname;
+            user.PhoneNumber = model.PhoneNumber;
+            if(user.Email != model.Email)
+            {
+                user.Email = model.Email;
+                user.UserName = model.Email;
+                user.EmailConfirmed = false;
+                await SendConfirmationEmailAsync(user);
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return new ServiceResponse
+                {
+                    Success = true,
+                    Message = "User successfully updated."
+                };
+            }
+
+            List<IdentityError> errorList = result.Errors.ToList();
+            string errors = "";
+
+            foreach (var error in errorList)
+            {
+                errors = errors + error.Description.ToString();
+            }
+
+            return new ServiceResponse
+            {
+                Success = false,
+                Message = errors
+            };
+        }
     }
 }
