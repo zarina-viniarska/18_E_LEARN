@@ -22,6 +22,9 @@ namespace _18_E_LEARN.Web.Infrastructure.Services
             // Add email service
             services.AddTransient<EmailService>();
 
+            // Add category service
+            services.AddTransient<CategoryService>();
+
             // Add application database context
             services.AddDbContext<AppDbContext>();
 

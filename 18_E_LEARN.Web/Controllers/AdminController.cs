@@ -13,12 +13,12 @@ namespace _18_E_LEARN.Web.Controllers
     public class AdminController : Controller
     {
         private readonly UserService _userService;
+        private readonly CategoryService _categoryService;
 
-        public object AddModelState { get; private set; }
-
-        public AdminController(UserService userService)
+        public AdminController(UserService userService, CategoryService categoryService)
         {
             _userService = userService;
+            _categoryService = categoryService;
         }
 
         public IActionResult Index()
@@ -194,6 +194,12 @@ namespace _18_E_LEARN.Web.Controllers
                 return View(model);
             }
             return View(model);
+        }
+
+        public async Task<IActionResult> GetCategories()
+        {
+            var result = await _categoryService.GetAllAsync();
+            return View(result.Payload);
         }
     }
 }

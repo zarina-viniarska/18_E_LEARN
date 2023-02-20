@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using _18_E_LEARN.Web.Infrastructure.AutoMapper;
+using _18_E_LEARN.Web.Infrastructure.Repositoryes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ ServicesConfiguration.Config(builder.Services);
 
 // Include Mapping
 AutoMapperConfiguration.Config(builder.Services);
+
+// Include repositories
+RepositoryConfiguration.Config(builder.Services);
 
 
 var app = builder.Build();

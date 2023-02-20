@@ -1,4 +1,5 @@
-﻿using _18_E_LEARN.DataAccess.Data.Models.User;
+﻿using _18_E_LEARN.DataAccess.Data.Models.Categories;
+using _18_E_LEARN.DataAccess.Data.Models.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,5 +26,6 @@ namespace _18_E_LEARN.DataAccess.Data.Context
         }
 
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }
