@@ -1,4 +1,5 @@
 ﻿using _18_E_LEARN.BusinessLogic.Services;
+using _18_E_LEARN.DataAccess.Data.Models.Categories;
 using _18_E_LEARN.DataAccess.Data.Models.User;
 using _18_E_LEARN.DataAccess.Data.ViewModels.User;
 using _18_E_LEARN.DataAccess.Validation.User;
@@ -200,6 +201,23 @@ namespace _18_E_LEARN.Web.Controllers
         {
             var result = await _categoryService.GetAllAsync();
             return View(result.Payload);
+        }
+
+        public async Task<IActionResult> EditCategory(int Id)
+        {
+            var result = await _categoryService.GetByIdAsync(Id);
+            return View(result.Payload);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(Category model)
+        {
+            var result = _categoryService.UpdateCategory(model);
+            if(result.Success)
+            {
+                return RedirectToAction("GetCategories", "Admin");
+            }
+            return View();
         }
     }
 }

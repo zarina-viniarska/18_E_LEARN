@@ -13,7 +13,10 @@
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Categories</th>
-                                   
+                                    @if (User.IsInRole("Administrators"))
+                                    {
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                    }
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,6 +33,14 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        @if (User.IsInRole("Administrators"))
+                                        {
+                                            <td class="align-middle">
+                                                <a asp-controller="Admin" asp-action="EditCategory" asp-route-id="@item.Id" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                    Edit
+                                                </a>
+                                            </td>
+                                        }
                                     </tr>
                                 }
 

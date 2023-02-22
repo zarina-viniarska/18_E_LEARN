@@ -13,18 +13,50 @@ namespace _18_E_LEARN.BusinessLogic.Services
         private readonly ICategoryRepository _categoryRepository;
         public CategoryService(ICategoryRepository categoryRepository)
         {
-            _categoryRepository= categoryRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<ServiceResponse> GetAllAsync()
         {
-            List<Category> categories= await _categoryRepository.GetAllAsync();
+            List<Category> categories = await _categoryRepository.GetAllAsync();
             return new ServiceResponse
             {
                 Success = true,
                 Message = "All categories loaded.",
                 Payload = categories
             };
+        }
+
+        public async Task<ServiceResponse> GetByIdAsync(int Id)
+        {
+            var result = await _categoryRepository.GetByIdAsync(Id);
+            if (result == null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "Category not found."
+                };
+            }
+
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = "Category loaded.",
+                Payload = result
+            };
+        }
+
+        public ServiceResponse UpdateCategory(Category model)
+        {
+            var result = _categoryRepository.UpdateCategory(model);
+
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = "Category updated.",
+            };
+
         }
     }
 }
