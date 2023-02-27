@@ -25,6 +25,9 @@ namespace _18_E_LEARN.Web.Infrastructure.Services
             // Add category service
             services.AddTransient<CategoryService>();
 
+            // Add course service
+            services.AddTransient<CourseService>();
+
             // Add application database context
             services.AddDbContext<AppDbContext>();
 

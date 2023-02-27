@@ -11,6 +11,7 @@ namespace _18_E_LEARN.DataAccess.Data.IRepository
     {
         Task<List<Category>> GetAllAsync();
         Task<Category> GetByIdAsync(int id);
-        string UpdateCategory(Category category);
+        Task<Category> GetByNameAsync(string name);
+        string Update(Category category);
     }
 }

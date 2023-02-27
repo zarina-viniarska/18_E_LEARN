@@ -31,12 +31,21 @@ namespace _18_E_LEARN.DataAccess.Data.Repository
             }
         }
 
-        public string UpdateCategory(Category category)
+        public async Task<Category> GetByNameAsync(string name)
         {
             using (var _context = new AppDbContext())
             {
-                var result =  _context.Categories.Update(category);
-                _context.SaveChanges();
+                Category result = await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);
+                return result;
+            }
+        }
+
+        public string Update(Category category)
+        {
+            using (var _context = new AppDbContext())
+            {
+                var result = _context.Categories.Update(category);
+                var saveResult = _context.SaveChanges();
                 return result.State.ToString();
             }
         }

@@ -47,9 +47,18 @@ namespace _18_E_LEARN.BusinessLogic.Services
             };
         }
 
-        public ServiceResponse UpdateCategory(Category model)
+        public async Task<ServiceResponse> Update(Category model)
         {
-            var result = _categoryRepository.UpdateCategory(model);
+            var category = await _categoryRepository.GetByNameAsync(model.Name);
+            if (category != null)
+            {
+                return new ServiceResponse
+                {
+                    Success = false,
+                    Message = "Category exists.",
+                };
+            }
+            _categoryRepository.Update(model);
 
             return new ServiceResponse
             {

@@ -1,4 +1,5 @@
 ﻿using _18_E_LEARN.DataAccess.Data.Models.Categories;
+using _18_E_LEARN.DataAccess.Data.Models.Courses;
 using _18_E_LEARN.DataAccess.Data.Models.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,19 @@ namespace _18_E_LEARN.DataAccess.Data.Context
 
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            // Makes categorie's name unique
+            builder.Entity<Category>()
+                .HasIndex(c => c.Name).IsUnique();
+            // Makes course's name unique
+            builder.Entity<Course>()
+                .HasIndex(c => c.Name).IsUnique();
+        }
+
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Course> Courses { get; set; }
     }
 }

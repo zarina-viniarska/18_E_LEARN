@@ -9,6 +9,9 @@ namespace _18_E_LEARN.Web.Infrastructure.Repositoryes
         {
             // Add category repository
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+            // Add course repository
+            services.AddScoped<ICourseRepository, CourseRepository>();
         }
     }
 }

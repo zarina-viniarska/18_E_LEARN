@@ -6,6 +6,7 @@ using _18_E_LEARN.DataAccess.Validation.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace _18_E_LEARN.Web.Controllers
@@ -15,11 +16,13 @@ namespace _18_E_LEARN.Web.Controllers
     {
         private readonly UserService _userService;
         private readonly CategoryService _categoryService;
+        private readonly CourseService _courseService;
 
-        public AdminController(UserService userService, CategoryService categoryService)
+        public AdminController(CourseService courseService, UserService userService, CategoryService categoryService)
         {
             _userService = userService;
             _categoryService = categoryService;
+            _courseService = courseService;
         }
 
         public IActionResult Index()
@@ -209,15 +212,40 @@ namespace _18_E_LEARN.Web.Controllers
             return View(result.Payload);
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> EditCategory(Category model)
         {
-            var result = _categoryService.UpdateCategory(model);
-            if(result.Success)
+            var result = await _categoryService.Update(model);
+            if (result.Success)
             {
-                return RedirectToAction("GetCategories", "Admin");
+                return RedirectToAction(nameof(GetCategories));
             }
+            ViewBag.Error = result.Message;
             return View();
+        }
+
+        public async Task<IActionResult> GetCourses()
+        {
+            var result = await _courseService.GetAllAsync();
+            return View(result.Payload);
+        }
+
+        public async Task<IActionResult> AddCourse()
+        {
+            await LoadCategories();
+            return View();
+        }
+
+        private async Task LoadCategories()
+        {
+            var result = await _categoryService.GetAllAsync();
+            ViewBag.CategoryList = new SelectList(
+                (System.Collections.IEnumerable)result.Payload,
+                nameof(Category.Id),
+                nameof(Category.Name)
+                );
         }
     }
 }
