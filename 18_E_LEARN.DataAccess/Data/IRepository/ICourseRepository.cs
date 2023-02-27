@@ -10,5 +10,6 @@ namespace _18_E_LEARN.DataAccess.Data.IRepository
     public interface ICourseRepository
     {
         Task<IEnumerable<Course>> GetAllAsync();
+        Task Create(Course model);
     }
 }

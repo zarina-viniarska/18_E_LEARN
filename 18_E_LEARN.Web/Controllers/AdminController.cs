@@ -1,7 +1,9 @@
 ﻿using _18_E_LEARN.BusinessLogic.Services;
 using _18_E_LEARN.DataAccess.Data.Models.Categories;
 using _18_E_LEARN.DataAccess.Data.Models.User;
+using _18_E_LEARN.DataAccess.Data.ViewModels.Course;
 using _18_E_LEARN.DataAccess.Data.ViewModels.User;
+using _18_E_LEARN.DataAccess.Validation.Course;
 using _18_E_LEARN.DataAccess.Validation.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -235,6 +237,24 @@ namespace _18_E_LEARN.Web.Controllers
         public async Task<IActionResult> AddCourse()
         {
             await LoadCategories();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCourse(AddCourseVM model)
+        {
+            var validator = new AddCourseValidation();
+            var validationresult = await validator.ValidateAsync(model);
+            if (validationresult.IsValid)
+            {
+                if(model.Files != null)
+                {
+                    model.Files = HttpContext.Request.Form.Files;
+                }
+
+
+                return RedirectToAction(nameof(GetCourses));
+            }
             return View();
         }
 
