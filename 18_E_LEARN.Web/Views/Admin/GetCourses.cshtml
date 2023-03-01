@@ -1,4 +1,5 @@
-﻿@using _18_E_LEARN.DataAccess.Data.Models.Courses;
+﻿@using _18_E_LEARN.BusinessLogic;
+@using _18_E_LEARN.DataAccess.Data.Models.Courses;
 @model IEnumerable<Course>
 
 <div class="container-fluid py-4">
@@ -33,7 +34,7 @@
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div>
-                                                    @if (item.Image == "https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-6.png")
+                                                    @if (item.Image == Settings.DefaultCurseImage)
                                                     {
                                                         <img src="@item.Image" class="avatar avatar-sm me-3" alt="user1">
 

@@ -1,6 +1,7 @@
 ﻿using _18_E_LEARN.DataAccess.Data.IRepository;
 using _18_E_LEARN.DataAccess.Data.Models.Courses;
 using _18_E_LEARN.DataAccess.Data.ViewModels.Course;
+using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -14,16 +15,18 @@ namespace _18_E_LEARN.BusinessLogic.Services
     public class CourseService
     {
         private readonly ICourseRepository _courseRepository;
+        private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IHostingEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
 
-        public CourseService(IConfiguration configuration, IHostingEnvironment hostEnvironment, ICourseRepository courseRepository, ICategoryRepository categoryRepository)
+        public CourseService(IMapper mapper, IConfiguration configuration, IHostingEnvironment hostEnvironment, ICourseRepository courseRepository, ICategoryRepository categoryRepository)
         {
             _courseRepository = courseRepository;
             _categoryRepository = categoryRepository;
             _hostEnvironment = hostEnvironment;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task<ServiceResponse> GetAllAsync()
@@ -39,9 +42,10 @@ namespace _18_E_LEARN.BusinessLogic.Services
 
         public async Task<ServiceResponse> Create(AddCourseVM model)
         {
-            string webPath = _hostEnvironment.WebRootPath;
+           
             if(model.Files != null)
             {
+                string webPath = _hostEnvironment.WebRootPath;
                 var files = model.Files;
                 string upload = webPath + Settings.ImagePath;
                 string fileName = Guid.NewGuid().ToString();
@@ -53,7 +57,19 @@ namespace _18_E_LEARN.BusinessLogic.Services
 
                 model.Image = fileName + extension;
             }
+            else
+            {
+                model.Image = Settings.DefaultCurseImage;
+            }
 
+            var mappedCourse = _mapper.Map<AddCourseVM, Course>(model);
+
+            await _courseRepository.Create(mappedCourse);
+            return new ServiceResponse
+            {
+                Success = true,
+                Message = "Course successfully updated."
+            };
         }
     }
 }

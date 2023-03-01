@@ -12,6 +12,15 @@ namespace _18_E_LEARN.DataAccess.Data.Repository
 {
     public class CourseRepository : ICourseRepository
     {
+        public async Task Create(Course model)
+        {
+            using (var _context = new AppDbContext())
+            {
+                await _context.Courses.AddAsync(model);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task<IEnumerable<Course>> GetAllAsync()
         {
             using(var _context = new AppDbContext())

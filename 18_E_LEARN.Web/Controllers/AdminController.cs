@@ -252,7 +252,7 @@ namespace _18_E_LEARN.Web.Controllers
                     model.Files = HttpContext.Request.Form.Files;
                 }
 
-
+                await _courseService.Create(model);
                 return RedirectToAction(nameof(GetCourses));
             }
             return View();

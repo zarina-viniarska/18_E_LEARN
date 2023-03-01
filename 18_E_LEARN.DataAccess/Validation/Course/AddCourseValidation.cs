@@ -14,7 +14,7 @@ namespace _18_E_LEARN.DataAccess.Validation.Course
         {
             RuleFor(r => r.Name).NotEmpty();
             RuleFor(r => r.Description).NotEmpty();
-            RuleFor(r => r.Price).NotEmpty().GreaterThanOrEqualTo(100000).LessThanOrEqualTo(0);
+            RuleFor(r => r.Price).NotEmpty().GreaterThanOrEqualTo(0).LessThanOrEqualTo(100000);
             RuleFor(r => r.CategoryId).NotEmpty();
         }
     }
