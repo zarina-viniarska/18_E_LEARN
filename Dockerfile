@@ -1,4 +1,3 @@
-
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 MAINTAINER Trofimchuk Andrii
 WORKDIR /app
@@ -13,4 +12,3 @@ RUN dotnet build "18_E_LEARN.Web.csproj" -c Release -o /app/build
 
 WORKDIR /app/build
 ENTRYPOINT ["dotnet", "18_E_LEARN.Web.dll", "--urls=http://0.0.0.0:80"]
-(END)
